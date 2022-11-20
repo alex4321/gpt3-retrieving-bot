@@ -1,0 +1,12 @@
+openai
+pytest
+requests
+bs4
+nltk
+fuzzysearch
+scikit-learn
+transformers
+sentence-transformers
+torch
+numpy
+protobuf==3.20.3
