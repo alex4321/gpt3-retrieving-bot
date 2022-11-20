@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "name": "Test session (Dixi)",
+            "type": "python",
+            "request": "launch",
+            "program": "test.py",
+            "console": "integratedTerminal",
+            "env": {
+                "OPENAI_KEY": "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"
+            }
+        }
+    ]
+}

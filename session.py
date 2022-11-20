@@ -45,5 +45,5 @@ class RobotSession:
             dialogue = dialogue[-self.max_dialogue_keep:]
         if len(hints) > self.max_hints_keep:
             hints = hints[-self.max_hints_keep:]
-        self.session_search.update("-", "\n".join([retort, response]))
+        self.session_search.update("session", "\n".join([retort, response]))
         return RobotResponse(dialogue, hints, response)
