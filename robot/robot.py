@@ -19,6 +19,7 @@ class Robot:
     def response(self, hints: List[str], dialogue: List[str], retort: str) -> str:
         result = None
         force_answer = False
+        previous_completion = None
         for _ in range(self.max_iters):
             filler_vars = dict(
                 self.filler_vars,
@@ -34,8 +35,9 @@ class Robot:
             completion = self.language_model.complete(prompt)
             if force_answer:
                 completion = "Answer: " + completion
-            if completion == "":
+            if completion == "" or ((previous_completion is not None) and (completion == previous_completion)):
                 force_answer = True
+            previous_completion = completion
             breaker = False
             for reaction in self.completion_reactions:
                 reaction_vars = {

@@ -117,7 +117,8 @@ class SearchLocalDatabaseSemantic(SearchInterface):
         self.paragraphs, self.knn = self.scan(self.directory, True, self.top_n, self.knn_params)
 
     def search(self, query: str) -> List[str]:
-        assert self.knn is not None
+        if self.knn is None:
+            return [""]
         query_embeddings = self.encode([query])
         paragraph_indices_proba = self.knn.predict_proba(query_embeddings)[0]
         top_indices = (-paragraph_indices_proba).argsort()[:self.top_n]

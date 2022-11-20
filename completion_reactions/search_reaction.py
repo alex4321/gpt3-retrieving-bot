@@ -21,7 +21,11 @@ class SearchCompletionReaction(CompletionReactionInterface):
                     hint.startswith(query_line)
                     for hint in hints
                 ])
+                if query_line_searched:
+                    continue
                 query_hints = self.search.search(query_line)
+                query_hints = [item.strip() for item in query_hints]
+                query_hints = [item for item in query_hints if item]
                 if query_hints == []:
                     query_hints.append(["not known"])
                 for query_hint in query_hints:
