@@ -133,11 +133,11 @@ Continue given conversion. Repeating yourself or companions is bad - paraphrase,
 
 Hint: 
 Dialogue: 
-- Dixie Flatline: 2+2=4
+- %CHARACTER_NAME%: 2+2=4
 Retort:
 - What is (2)+2?
 Separator:
-Answer: Dixie Flatline: Well, it's definitely four.
+Answer: %CHARACTER_NAME%: Well, it's definitely four.
 
 Hint: 
 %HINTS%
