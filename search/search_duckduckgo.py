@@ -3,8 +3,11 @@ import urllib.parse
 import requests
 from bs4 import BeautifulSoup
 from .search_interface import SearchInterface
+import time
+from .utils import is_local_request
 
 
+__TIMEOUT__ = 1.0
 __DUCKDUCKGO_SEARCH_URL__ = "https://duckduckgo.com/html/?q={query}"
 
 
@@ -13,6 +16,9 @@ class SearchDuckDuckGo(SearchInterface):
         self.keep_top_n = keep_top_n
 
     def search(self, query: str) -> List[str]:
+        local_request, query = is_local_request(query)
+        if local_request:
+            return []
         url = __DUCKDUCKGO_SEARCH_URL__.format(
             query=urllib.parse.quote(query)
         )
@@ -30,6 +36,7 @@ class SearchDuckDuckGo(SearchInterface):
             result.select_one(".result__snippet").text
             for result in results
         ]
+        time.sleep(__TIMEOUT__)
         return snippets[:self.keep_top_n]
 
     def update(self, document: str, amendment: str) -> None:

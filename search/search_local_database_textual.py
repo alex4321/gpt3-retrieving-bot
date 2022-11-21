@@ -5,6 +5,7 @@ from nltk.tokenize import wordpunct_tokenize
 import fuzzysearch
 import json
 from .search_interface import SearchInterface
+from .utils import is_local_request
 from dataclasses import dataclass
 
 
@@ -95,6 +96,7 @@ class SearchLocalDatabaseTextual(SearchInterface):
         self.paragraphs = self.scan(self.directory)
     
     def search(self, query: str) -> List[str]:
+        _, query = is_local_request(query)
         query = self.preprocess(query)
         paragraph_distances = []
         for paragraph in self.paragraphs:

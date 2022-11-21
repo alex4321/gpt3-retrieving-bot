@@ -6,7 +6,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from typing import List, Union, Tuple
 import pickle
 import numpy as np
-from .utils import get_sentence_transformer
+from .utils import get_sentence_transformer, is_local_request
 from .nn_config import NNConfig
 import nltk
 
@@ -117,6 +117,7 @@ class SearchLocalDatabaseSemantic(SearchInterface):
         self.paragraphs, self.knn = self.scan(self.directory, True, self.top_n, self.knn_params)
 
     def search(self, query: str) -> List[str]:
+        _, query = is_local_request(query)
         if self.knn is None:
             return [""]
         query_embeddings = self.encode([query])

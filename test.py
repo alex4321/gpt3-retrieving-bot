@@ -1,6 +1,6 @@
 from session import RobotConfig, RobotSession
 from lm_utils import PromptFiller, LanguageModelGPT3
-from search import SearchDuckDuckGo, SearchRanker, SearchRankerItem, SearchLocalDatabaseTextual, SearchLocalDatabaseSemantic, NNConfig
+from search import SearchDuckDuckGo, SearchRanker, SearchRankerItem, SearchLocalDatabaseTextual, SearchLocalDatabaseSemantic, NNConfig, SearchCache
 import openai
 import os
 import shutil
@@ -47,7 +47,10 @@ if __name__ == "__main__":
                 SearchLogger(
                     "Search - Global - DuckDuckGo",
                     logger,
-                    SearchDuckDuckGo(2)
+                    SearchCache(
+                        "search-cache.json",
+                        SearchDuckDuckGo(2)
+                    )
                 ), 
                 1.0,
                 False

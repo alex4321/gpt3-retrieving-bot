@@ -24,6 +24,7 @@ class LoggerChannelFile(LoggerChannelInterface):
     def log(self, message: str) -> None:
         with open(self.name, "a") as target:
             target.write(f"{message}\n")
+            target.flush()
 
 
 class LoggerChannelStderr(LoggerChannelInterface):
@@ -32,3 +33,4 @@ class LoggerChannelStderr(LoggerChannelInterface):
 
     def log(self, message: str) -> None:
         sys.stderr.write(f"{message}\n")
+        sys.stderr.flush()

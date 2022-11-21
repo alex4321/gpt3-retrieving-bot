@@ -48,6 +48,11 @@ class RobotSession:
         for i in range(len(reactions)):
             wrap_function = self._reaction_wrapper_function(i)
             yield reactions[i], wrap_function
+
+    def phrase_cut(self, phrase: str) -> str:
+        if ":" in phrase:
+            phrase = ":".join(phrase.split(":")[1:]).strip()
+        return phrase
     
     def response(self, hints: List[str], dialogue: List[str], retort: str) -> RobotResponse:
         response = self.robot.response(hints, dialogue, retort)
@@ -57,5 +62,5 @@ class RobotSession:
             dialogue = dialogue[-self.max_dialogue_keep:]
         if len(hints) > self.max_hints_keep:
             hints = hints[-self.max_hints_keep:]
-        self.session_search.update("session", "\n".join([retort, response]))
+        self.session_search.update("session", "\n".join([self.phrase_cut(retort), self.phrase_cut(response)]))
         return RobotResponse(dialogue, hints, response)

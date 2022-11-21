@@ -15,10 +15,11 @@ class SearchCompletionReaction(CompletionReactionInterface):
             query = command.args
             for query_line in query.split("\n"):
                 query_line = query_line.strip()
-                if not query_line:
-                    continue                
+                query_line_no_story = query_line.replace("STORY", "").strip()
+                if not query_line or not query_line_no_story:
+                    continue
                 query_line_searched = any([
-                    hint.startswith(query_line)
+                    hint.startswith(query_line_no_story) or hint.startswith(query_line)
                     for hint in hints
                 ])
                 if query_line_searched:
@@ -26,8 +27,6 @@ class SearchCompletionReaction(CompletionReactionInterface):
                 query_hints = self.search.search(query_line)
                 query_hints = [item.strip() for item in query_hints]
                 query_hints = [item for item in query_hints if item]
-                if query_hints == []:
-                    query_hints.append(["not known"])
                 for query_hint in query_hints:
-                    hints.append(f"{query_line} - {query_hint}")
+                    hints.append(f"{query_line_no_story} - {query_hint}")
         return CompletionReaction(None, stop=False)

@@ -20,16 +20,23 @@ class Robot:
         result = None
         force_answer = False
         previous_completion = None
-        for _ in range(self.max_iters):
+        for i in range(self.max_iters):
+            hints_to_use = [
+                hint.strip()
+                for hint in hints
+                if hint.split(" : ")[-1] not in "\n".join(dialogue)
+            ]
             filler_vars = dict(
                 self.filler_vars,
                 **{
-                    "HINTS": "\n-" + "\n-".join(hints) if len(hints) > 0 else "None",
-                    "DIALOGUE": "-\n" + "\n-".join(dialogue) if len(dialogue) > 0 else "",
+                    "HINTS": ("\n-" + "\n-".join(hints_to_use) if len(hints_to_use) > 0 else "").strip(),
+                    "DIALOGUE": ("-\n" + "\n-".join(dialogue) if len(dialogue) > 0 else "").strip(),
                     "RETORT": retort
                 }
             )
             prompt = self.prompt_filler.fill(filler_vars)
+            if i == self.max_iters - 1:
+                force_answer = True
             if force_answer:
                 prompt = prompt.strip() + "\nAnswer:"
             completion = self.language_model.complete(prompt)
@@ -41,7 +48,7 @@ class Robot:
             breaker = False
             for reaction in self.completion_reactions:
                 reaction_vars = {
-                    "hints": hints
+                    "hints": hints,
                 }
                 reaction_response = reaction.check(completion, reaction_vars)
                 if reaction_response.answer is not None:

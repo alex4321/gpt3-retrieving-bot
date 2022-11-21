@@ -3,7 +3,9 @@ from typing import List
 from .nn_config import NNConfig
 from .search_interface import SearchInterface
 import numpy as np
-from .utils import get_crossencoder
+from .utils import get_crossencoder, is_local_request
+from torch.nn.functional import softmax
+from torch import FloatTensor
 
 
 @dataclass
@@ -14,11 +16,12 @@ class SearchRankerItem:
 
 
 class SearchRanker(SearchInterface):
-    def __init__(self, ranker_model: str, nn_config: NNConfig, search_systems: List[SearchRankerItem], top_n: int):
+    def __init__(self, ranker_model: str, nn_config: NNConfig, search_systems: List[SearchRankerItem], top_n: int, threshold: float=0.75):
         self.nn_config = nn_config
         self.model = get_crossencoder(ranker_model, device=nn_config.device)
         self.search_systems = search_systems
         self.top_n = top_n
+        self.threshold = threshold
 
     def update(self, document: str, amendment: str) -> None:
         for system in self.search_systems:
@@ -26,6 +29,7 @@ class SearchRanker(SearchInterface):
                 system.system.update(document, amendment)
 
     def search(self, query: str) -> List[str]:
+        _, query = is_local_request(query)
         outputs = []
         output_weights = []
         for system in self.search_systems:
@@ -33,11 +37,12 @@ class SearchRanker(SearchInterface):
             outputs += system_results
             output_weights += [system.weight] * len(system_results)
         query_output_pairs = [
-            (query, item)
+            (item, query)
             for item in outputs
         ]
         scores = self.model.predict(query_output_pairs, batch_size=self.nn_config.batch_size)
-        scores_entailment = scores[:, 1]
-        scores_entailment *= np.array(output_weights)
-        indices = (-scores_entailment).argsort()[:self.top_n]
-        return [outputs[idx] for idx in indices]
+        scores = softmax(FloatTensor(scores), dim=-1).detach().cpu().numpy()
+        scores_neutral = scores[:, 2]
+        scores_neutral *= np.array(output_weights)
+        indices = scores_neutral.argsort()[:self.top_n]
+        return [outputs[idx] for idx in indices if scores_neutral[idx] <= self.threshold * output_weights[idx]]
