@@ -129,7 +129,7 @@ Don't try to search it without mentioning it's STORY-related.
 
 # Conversation
 
-Continue given conversion. Repeating yourself or companions is bad - paraphrase, at least. Like:
+Continue given conversation. Repeating yourself or companions is bad - paraphrase, at least. Like:
 
 Hint: 
 Dialogue: 
