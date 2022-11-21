@@ -11,6 +11,7 @@ __COMPLETION_DEFAULTS__ = {
     "presence_penalty": 1.0,
     "max_tokens": 60,
     "top_p": 1,
+    "stop": [" Endseparator:"],
 }
 
 
@@ -28,4 +29,4 @@ class LanguageModelGPT3(LanguageModelInterface):
         )
         if len(completion.choices) == 0:
             return ""
-        return completion.choices[0].text.strip()
+        return completion.choices[0].text.strip().replace("Endseparator:", "").strip()
