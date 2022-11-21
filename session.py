@@ -1,5 +1,5 @@
 from typing import List, Dict
-from robot import Robot
+from robot import Robot, CompletionReactionInterface
 from search import SearchInterface
 from lm_utils import LanguageModelInterface, PromptFiller
 from dataclasses import dataclass
@@ -36,6 +36,18 @@ class RobotSession:
         self.session_search = session_search
         self.max_hints_keep = max_hints_keep
         self.max_dialogue_keep = max_dialogue_keep
+
+    def _reaction_wrapper_function(self, reaction_index: int):
+        def func(reaction: CompletionReactionInterface):
+            self.robot.completion_reactions[reaction_index] = reaction
+        
+        return func
+
+    def wrap_reactions_loop(self):
+        reactions = self.robot.completion_reactions
+        for i in range(len(reactions)):
+            wrap_function = self._reaction_wrapper_function(i)
+            yield reactions[i], wrap_function
     
     def response(self, hints: List[str], dialogue: List[str], retort: str) -> RobotResponse:
         response = self.robot.response(hints, dialogue, retort)
