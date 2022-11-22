@@ -83,9 +83,9 @@ def test_search_ranker():
         biochip_search_documents = {item.split(" : ")[0] for item in biochip_search}
         cortex_chip_search_documents = {item.split(" : ")[0] for item in cortex_chip_search}
         phrase_search_documents = {item.split(" : ")[0] for item in phrase_search}
-        assert construct_search_documents == {"Dixie Flatline", "Cortex Chip"}
-        assert rockerboy_search_documents == {"Johny Silverhand", "johny silverhand"}
-        assert biochip_search_documents == {"Cortex Chip"}
+        assert construct_search_documents == {"Dixie Flatline", "relic"}
+        assert rockerboy_search_documents == {"Johny Silverhand"}
+        assert biochip_search_documents == {"Cortex Chip", "relic"}
         assert cortex_chip_search_documents == {"Cortex Chip"}
         assert phrase_search_documents == {"Johny Silverhand"}
     finally:

@@ -8,9 +8,9 @@ class TestLanguageModel(LanguageModelInterface):
         pass
 
     def complete(self, prompt: str) -> str:
-        if prompt == "1":
+        if prompt.startswith("1"):
             return "2"
-        elif prompt == "2":
+        elif prompt.startswith("2"):
             return "3"
         else:
             return "UNKNOWN"
@@ -23,6 +23,7 @@ class TestCompletionReaction(CompletionReactionInterface):
         self.stop = stop
 
     def check(self, completion: str, variables: dict) -> CompletionReaction:
+        completion = completion.replace("Answer:", "").strip()
         if completion == self.trigger:
             variables["hints"].append(f"TRIGGER_{self.trigger}")
             return CompletionReaction(answer=f"TRIGGER_{self.trigger}", stop=self.stop)
