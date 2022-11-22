@@ -11,7 +11,7 @@ __COMPLETION_DEFAULTS__ = {
     "presence_penalty": 1.0,
     "max_tokens": 60,
     "top_p": 1,
-    "stop": [" Endseparator:"],
+    "stop": ["Endseparator:"],
 }
 
 
