@@ -14,6 +14,10 @@ setup(
     author="Alexander Pozharskii",
     author_email="gaussmake@gmail.com",
     url="https://github.com/alex4321/gpt3-retrieving-bot",
+    data_files=[
+        ('', ['README.md', 'requirements.txt'])
+    ],
+    include_package_data=True,
     long_description=readme_text,
     long_description_content_type='text/markdown',
 )
