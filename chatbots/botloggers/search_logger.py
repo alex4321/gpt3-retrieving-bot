@@ -2,7 +2,7 @@
 Logging decorator for search systems
 """
 from typing import List
-from search import SearchInterface
+from chatbots.search import SearchInterface
 from .base_logger import BaseLogger
 from .channels import LoggerChannelInterface
 

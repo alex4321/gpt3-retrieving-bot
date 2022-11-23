@@ -1,6 +1,6 @@
 import shutil
 import tempfile
-from search import SearchLocalDatabaseTextual
+from chatbots.search import SearchLocalDatabaseTextual
 
 
 __DIXIE_FLATLINE_ARTICLE__ = """

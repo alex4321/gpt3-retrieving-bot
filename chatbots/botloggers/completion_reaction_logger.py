@@ -1,7 +1,7 @@
 """
 Logger for language model completion processors
 """
-from robot import CompletionReactionInterface, CompletionReaction
+from chatbots.robot import CompletionReactionInterface, CompletionReaction
 from .base_logger import BaseLogger
 from .channels import LoggerChannelInterface
 

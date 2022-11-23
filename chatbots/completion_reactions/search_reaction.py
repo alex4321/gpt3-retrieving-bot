@@ -1,8 +1,8 @@
 """
 Search command processor
 """
-from robot import CompletionReaction, CompletionReactionInterface
-from search import SearchInterface
+from chatbots.robot import CompletionReaction, CompletionReactionInterface
+from chatbots.search import SearchInterface
 from .utils import split_completion, COMMAND_SEARCH
 
 

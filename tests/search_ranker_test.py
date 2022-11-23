@@ -1,6 +1,6 @@
 import shutil
 import tempfile
-from search import SearchLocalDatabaseSemantic, SearchLocalDatabaseTextual, SearchRanker, SearchRankerItem, NNConfig
+from chatbots.search import SearchLocalDatabaseSemantic, SearchLocalDatabaseTextual, SearchRanker, SearchRankerItem, NNConfig
 
 
 __DIXIE_FLATLINE_ARTICLE__ = """
@@ -61,6 +61,7 @@ def test_search_ranker():
         search_text = SearchLocalDatabaseTextual(temp_dir_text, "english", 2)
         search = SearchRanker(
             "cross-encoder/nli-deberta-v3-base",
+            2,
             NNConfig("cuda:0", 8),
             [
                 SearchRankerItem(search_semantic, 0.5, True),

@@ -2,7 +2,7 @@
 Bot main part - prompt filler/language model/LM completions handlers glue
 """
 from typing import List, Dict
-from lm_utils import PromptFiller, LanguageModelInterface
+from chatbots.lm_utils import PromptFiller, LanguageModelInterface
 from .completion_reaction_interface import CompletionReactionInterface
 
 

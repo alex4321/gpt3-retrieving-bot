@@ -1,6 +1,6 @@
 import os
-from lm_utils import LanguageModelInterface, PromptFiller
-from robot import CompletionReaction, CompletionReactionInterface, Robot
+from chatbots.lm_utils import LanguageModelInterface, PromptFiller
+from chatbots.robot import CompletionReaction, CompletionReactionInterface, Robot
 
 
 class TestLanguageModel(LanguageModelInterface):
@@ -59,7 +59,6 @@ def test_robot_response_max_iters1():
         "3"
     )
     assert hints == ["TRIGGER_2", "TRIGGER_3", "TRIGGER_UNKNOWN"]
-    pass
         
 
 def test_robot_response_max_iters2_stop():

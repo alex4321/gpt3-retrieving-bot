@@ -1,9 +1,9 @@
-from typing import List, Dict
-from robot import Robot, CompletionReactionInterface
-from search import SearchInterface
-from lm_utils import LanguageModelInterface, PromptFiller
 from dataclasses import dataclass
-from completion_reactions import SearchCompletionReaction, AnswerCompletionReaction, DiceCompletionReaction, ActionCompletionReaction
+from typing import List, Dict
+from chatbots.robot import Robot, CompletionReactionInterface
+from chatbots.search import SearchInterface
+from chatbots.lm_utils import LanguageModelInterface, PromptFiller
+from chatbots.completion_reactions import SearchCompletionReaction, AnswerCompletionReaction, DiceCompletionReaction, ActionCompletionReaction
 
 
 @dataclass

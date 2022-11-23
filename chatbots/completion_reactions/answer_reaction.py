@@ -1,7 +1,7 @@
 """
 Answer command postprocessor
 """
-from robot import CompletionReaction, CompletionReactionInterface
+from chatbots.robot import CompletionReaction, CompletionReactionInterface
 from .utils import split_completion, COMMAND_ANSWER
 
 

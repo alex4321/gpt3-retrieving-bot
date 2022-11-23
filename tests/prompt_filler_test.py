@@ -1,4 +1,4 @@
-from lm_utils import PromptFiller
+from chatbots.lm_utils import PromptFiller
 
 
 def test_prompt_filler_fill():

@@ -1,7 +1,7 @@
 """
 Logger decorator for language models
 """
-from lm_utils import LanguageModelInterface
+from chatbots.lm_utils import LanguageModelInterface
 from .channels import LoggerChannelInterface
 from .base_logger import BaseLogger
 

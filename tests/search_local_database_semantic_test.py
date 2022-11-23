@@ -1,7 +1,6 @@
-import os
 import shutil
 import tempfile
-from search import SearchLocalDatabaseSemantic, NNConfig
+from chatbots.search import SearchLocalDatabaseSemantic, NNConfig
 
 
 __DIXIE_FLATLINE_ARTICLE__ = """

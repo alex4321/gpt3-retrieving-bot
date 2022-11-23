@@ -1,4 +1,4 @@
-from completion_reactions import split_completion, Command
+from chatbots.completion_reactions import split_completion, Command
 
 
 def test_split_completion():
