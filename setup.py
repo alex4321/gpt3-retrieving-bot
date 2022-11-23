@@ -7,7 +7,7 @@ with open(os.path.join(os.path.dirname(__file__), "requirements.txt"), "r", enco
 with open(os.path.join(os.path.dirname(__file__), "README.md"), "r", encoding="utf-8") as readme:
     readme_text = readme.read()
 setup(
-    name="aulm-chatbots",
+    name="auglm-chatbots",
     version="0.0.1",
     packages=find_packages(include=["chatbots", "chatbots.*"]),
     install_requires=requirements,
