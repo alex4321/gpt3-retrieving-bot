@@ -56,7 +56,7 @@ Simon obtains two Cortex Chips over the course of the game. One contains a brain
 def test_search_local_database_semantic():
     temp_dir = tempfile.mkdtemp()
     try:
-        search = SearchLocalDatabaseSemantic(temp_dir, "sentence-transformers/all-MiniLM-L6-v2", 2, NNConfig("cuda:0", 8), {})
+        search = SearchLocalDatabaseSemantic(temp_dir, "sentence-transformers/all-MiniLM-L6-v2", 2, NNConfig("cpu", 8), {})
         search.update("Dixie Flatline", __DIXIE_FLATLINE_ARTICLE__)
         search.update("Johny Silverhand", __JOHNNY_SILVERHAND_ARTICLE__)
         search.update("Relic", __RELIC_ARTICLE__)

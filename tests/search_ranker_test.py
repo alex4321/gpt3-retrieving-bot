@@ -62,7 +62,7 @@ def test_search_ranker():
         search = SearchRanker(
             "cross-encoder/nli-deberta-v3-base",
             2,
-            NNConfig("cuda:0", 8),
+            NNConfig("cpu", 8),
             [
                 SearchRankerItem(search_semantic, 0.5, True),
                 SearchRankerItem(search_text, 0.8, True),
