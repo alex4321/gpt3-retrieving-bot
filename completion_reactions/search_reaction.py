@@ -1,9 +1,15 @@
+"""
+Search command processor
+"""
 from robot import CompletionReaction, CompletionReactionInterface
 from search import SearchInterface
 from .utils import split_completion, COMMAND_SEARCH
 
 
 class SearchCompletionReaction(CompletionReactionInterface):
+    """
+    Search command processor
+    """
     def __init__(self, search: SearchInterface):
         self.search = search
 

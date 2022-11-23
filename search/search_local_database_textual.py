@@ -1,3 +1,6 @@
+"""
+Text search through local DB by embeddings similarity
+"""
 from dataclasses import dataclass
 import json
 import os
@@ -11,6 +14,9 @@ from .utils import is_local_request
 
 @dataclass
 class Paragraph:
+    """
+    Document paragraphs
+    """
     text: str
     processed_text: str
     document_name: str
@@ -22,23 +28,27 @@ __DEFAULT_SEARCH_PARAMS__ = {
 
 
 class SearchLocalDatabaseTextual(SearchInterface):
-    def __init__(self, directory: str, language: str, top_results: int, search_params: Union[dict, None] = None) -> None:
+    """
+    Semantic search through local DB by embeddings similarity
+    """
+    def __init__(self, directory: str, language: str, top_results: int,
+                 search_params: Union[dict, None] = None) -> None:
         self.directory = directory
         self.language = language
-        self.paragraphs = self.scan(self.directory)
+        self.paragraphs = self._scan(self.directory)
         self.stopwords = stopwords.words(language)
         self.top_results = top_results
         if search_params is None:
             search_params = {}
         self.search_params = dict(__DEFAULT_SEARCH_PARAMS__, **search_params)
 
-    def preprocess(self, text: str) -> str:
+    def _preprocess(self, text: str) -> str:
         tokens = wordpunct_tokenize(text.lower())
         tokens = filter(str.isalnum, tokens)
         tokens = filter(lambda token: token not in self.stopwords, tokens)
         return " ".join(tokens)
 
-    def scan_directory(self, directory: str) -> List[Tuple[str, str]]:
+    def _scan_directory_files(self, directory: str) -> List[Tuple[str, str]]:
         paragraph_files = []
         for document_path in os.listdir(directory):
             document_path_full = os.path.join(directory, document_path)
@@ -53,9 +63,10 @@ class SearchLocalDatabaseTextual(SearchInterface):
                 paragraph_files.append((document_path, paragraph_path_full))
         return paragraph_files
 
-    def scan(self, directory: str) -> List[Paragraph]:
+    def _scan(self, directory: str) -> List[Paragraph]:
         paragraphs = []
-        for document, filename in self.scan_directory(directory):
+        documents = self._scan_directory_files(directory)
+        for document, filename in documents:
             with open(filename, "r", encoding="utf-8") as src:
                 paragraph_json = json.load(src)
                 paragraphs.append(Paragraph(
@@ -66,15 +77,15 @@ class SearchLocalDatabaseTextual(SearchInterface):
         return paragraphs
 
     def update(self, document: str, amendment: str) -> None:
-        document_full_path = os.path.join(self.directory, self.preprocess(document))
+        document_full_path = os.path.join(self.directory, self._preprocess(document))
         if not os.path.exists(document_full_path):
             os.makedirs(document_full_path)
-        
-        paragraph_count = len(self.scan_directory(self.directory))
+
+        paragraph_count = len(self._scan_directory_files(self.directory))
 
         new_paragraphs_text = amendment.split("\n")
         new_paragraphs_text = [item.strip() for item in new_paragraphs_text]
-        new_paragraphs_processed = [self.preprocess(item) for item in new_paragraphs_text]
+        new_paragraphs_processed = [self._preprocess(item) for item in new_paragraphs_text]
         new_paragraphs = [
             Paragraph(text=text, processed_text=processed_text, document_name=document)
             for text, processed_text in zip(new_paragraphs_text, new_paragraphs_processed)
@@ -93,14 +104,16 @@ class SearchLocalDatabaseTextual(SearchInterface):
                     target
                 )
 
-        self.paragraphs = self.scan(self.directory)
+        self.paragraphs = self._scan(self.directory)
 
     def search(self, query: str) -> List[str]:
         _, query = is_local_request(query)
-        query = self.preprocess(query)
+        query = self._preprocess(query)
         paragraph_distances = []
         for paragraph in self.paragraphs:
-            paragraph_matches = fuzzysearch.find_near_matches(query, paragraph.processed_text, **self.search_params)
+            paragraph_matches = fuzzysearch.find_near_matches(query,
+                                                              paragraph.processed_text,
+                                                              **self.search_params)
             if len(paragraph_matches) > 0:
                 distances = map(lambda match: match.dist, paragraph_matches)
                 min_distance = min(distances)

@@ -1,3 +1,6 @@
+"""
+LM postprocessor utils
+"""
 import re
 from typing import List
 from dataclasses import dataclass
@@ -21,14 +24,20 @@ COMMANDS_WITH_SUFFIX = {
 
 @dataclass
 class Command:
+    """
+    Command extracted from LM completion
+    """
     type: str
     args: str
 
 
 def split_completion(completion: str) -> List[Command]:
+    """
+    Split LM completion to a sequence of commands
+    """
     pattern = "(" + \
         "|".join([
-            command + "\:"
+            command + r"\:"
             for command in COMMANDS
         ]) + \
         ")"

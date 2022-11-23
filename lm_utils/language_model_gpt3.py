@@ -1,3 +1,6 @@
+"""
+GPT3 API based language model wrapper
+"""
 from typing import Union
 import openai
 from .language_model_interface import LanguageModelInterface
@@ -15,12 +18,15 @@ __COMPLETION_DEFAULTS__ = {
 
 
 class LanguageModelGPT3(LanguageModelInterface):
+    """
+    GPT3 API based language model wrapper
+    """
     def __init__(self, completion_params: Union[dict, None] = None) -> None:
         super(LanguageModelGPT3, self).__init__()
         if completion_params is None:
             completion_params = {}
         self.completion_params = dict(__COMPLETION_DEFAULTS__, **completion_params)
-    
+
     def complete(self, prompt: str) -> str:
         completion = openai.Completion.create(
             prompt=prompt.strip(),
