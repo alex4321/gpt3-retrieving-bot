@@ -1,14 +1,14 @@
 from dataclasses import dataclass
 import json
 import os
-from .search_interface import SearchInterface
-from sklearn.neighbors import KNeighborsClassifier
-from typing import List, Union, Tuple
 import pickle
-import numpy as np
-from .utils import get_sentence_transformer, is_local_request
-from .nn_config import NNConfig
+from typing import List, Union, Tuple
 import nltk
+import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
+from .nn_config import NNConfig
+from .search_interface import SearchInterface
+from .utils import get_sentence_transformer, is_local_request
 
 
 @dataclass
@@ -34,7 +34,7 @@ class SearchLocalDatabaseSemantic(SearchInterface):
             knn_params = {}
         self.knn_params = dict(__DEFAULT_KNN_PARAMS__, **knn_params)
         self.paragraphs, self.knn = self.scan(self.directory, False, self.top_n, self.knn_params)
-    
+
     def scan(self, directory: str, rebuild_knn: bool, top_n: int, knn_params: dict) -> Tuple[List[Paragraph], Union[KNeighborsClassifier, None]]:
         paragraphs = []
         for document_name in os.listdir(directory):

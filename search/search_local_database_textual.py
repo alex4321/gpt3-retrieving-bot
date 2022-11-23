@@ -1,12 +1,12 @@
-from typing import List, Union, Tuple
+from dataclasses import dataclass
+import json
 import os
+from typing import List, Union, Tuple
+import fuzzysearch
 from nltk.corpus import stopwords
 from nltk.tokenize import wordpunct_tokenize
-import fuzzysearch
-import json
 from .search_interface import SearchInterface
 from .utils import is_local_request
-from dataclasses import dataclass
 
 
 @dataclass
@@ -31,7 +31,7 @@ class SearchLocalDatabaseTextual(SearchInterface):
         if search_params is None:
             search_params = {}
         self.search_params = dict(__DEFAULT_SEARCH_PARAMS__, **search_params)
-    
+
     def preprocess(self, text: str) -> str:
         tokens = wordpunct_tokenize(text.lower())
         tokens = filter(str.isalnum, tokens)
@@ -64,7 +64,7 @@ class SearchLocalDatabaseTextual(SearchInterface):
                     document_name=document,
                 ))
         return paragraphs
-    
+
     def update(self, document: str, amendment: str) -> None:
         document_full_path = os.path.join(self.directory, self.preprocess(document))
         if not os.path.exists(document_full_path):
@@ -92,9 +92,9 @@ class SearchLocalDatabaseTextual(SearchInterface):
                     },
                     target
                 )
-        
+
         self.paragraphs = self.scan(self.directory)
-    
+
     def search(self, query: str) -> List[str]:
         _, query = is_local_request(query)
         query = self.preprocess(query)

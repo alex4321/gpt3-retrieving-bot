@@ -43,7 +43,7 @@ def split_completion(completion: str) -> List[Command]:
             buffer = []
         else:
             buffer.append(item)
-    if buffer != []:
+    if buffer:
         result.append((command, buffer))
     result = [
         (command, "".join(items).strip())
@@ -58,4 +58,3 @@ def split_completion(completion: str) -> List[Command]:
         Command(command, items)
         for command, items in result
     ]
-    

@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 from typing import List
-from .nn_config import NNConfig
-from .search_interface import SearchInterface
 import numpy as np
-from .utils import get_crossencoder, is_local_request
 from torch.nn.functional import softmax
 from torch import FloatTensor
+from .nn_config import NNConfig
+from .search_interface import SearchInterface
+from .utils import get_crossencoder, is_local_request
 
 
 @dataclass

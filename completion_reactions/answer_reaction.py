@@ -1,5 +1,5 @@
-from .utils import split_completion, COMMAND_ANSWER
 from robot import CompletionReaction, CompletionReactionInterface
+from .utils import split_completion, COMMAND_ANSWER
 
 
 class AnswerCompletionReaction(CompletionReactionInterface):

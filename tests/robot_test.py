@@ -28,7 +28,7 @@ class TestCompletionReaction(CompletionReactionInterface):
             variables["hints"].append(f"TRIGGER_{self.trigger}")
             return CompletionReaction(answer=f"TRIGGER_{self.trigger}", stop=self.stop)
         return CompletionReaction(answer=None, stop=False)
-        
+
 
 def test_robot_response_max_iters1():
     prompt_filler = PromptFiller(os.path.join(os.path.dirname(__file__), "robot_test_prompt.txt"))

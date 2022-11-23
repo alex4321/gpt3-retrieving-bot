@@ -1,7 +1,7 @@
-import os
 import json
-from .search_interface import SearchInterface
+import os
 from typing import List
+from .search_interface import SearchInterface
 
 
 # TODO: non-file cache
@@ -11,7 +11,7 @@ class SearchCache(SearchInterface):
         self.fname = fname
         self.cache = {}
         if os.path.exists(self.fname):
-            with open(self.fname, "r") as src:
+            with open(self.fname, "r", encoding="utf-8") as src:
                 self.cache = json.load(src)
         self.search_system = search
     
@@ -21,6 +21,6 @@ class SearchCache(SearchInterface):
     def search(self, query: str) -> List[str]:
         if query not in self.cache:
             self.cache[query] = self.search_system.search(query)
-            with open(self.fname, "w") as target:
+            with open(self.fname, "w", encoding="utf-8") as target:
                 json.dump(self.cache, target)
         return self.cache[query]

@@ -9,7 +9,6 @@ __COMPLETION_DEFAULTS__ = {
     "max_tokens": 150,
     "frequency_penalty": 1.0,
     "presence_penalty": 1.0,
-    "max_tokens": 60,
     "top_p": 1,
     "stop": ["Endseparator:"],
 }

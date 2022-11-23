@@ -20,17 +20,14 @@ class LoggerChannelFile(LoggerChannelInterface):
     def __init__(self, name: str) -> None:
         super().__init__()
         self.name = name
-    
+
     def log(self, message: str) -> None:
-        with open(self.name, "a") as target:
+        with open(self.name, "a", encoding="utf-8") as target:
             target.write(f"{message}\n")
             target.flush()
 
 
 class LoggerChannelStderr(LoggerChannelInterface):
-    def __init__(self) -> None:
-        super().__init__()
-
     def log(self, message: str) -> None:
         sys.stderr.write(f"{message}\n")
         sys.stderr.flush()

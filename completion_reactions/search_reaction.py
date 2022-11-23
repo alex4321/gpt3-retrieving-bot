@@ -1,6 +1,6 @@
 from robot import CompletionReaction, CompletionReactionInterface
-from .utils import split_completion, COMMAND_SEARCH
 from search import SearchInterface
+from .utils import split_completion, COMMAND_SEARCH
 
 
 class SearchCompletionReaction(CompletionReactionInterface):

@@ -1,7 +1,7 @@
-from .utils import split_completion, COMMAND_DICE
-from robot import CompletionReaction, CompletionReactionInterface
 import random
 import re
+from robot import CompletionReaction, CompletionReactionInterface
+from .utils import split_completion, COMMAND_DICE
 
 
 class DiceCompletionReaction(CompletionReactionInterface):
