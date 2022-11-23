@@ -9,8 +9,8 @@ with open(os.path.join(os.path.dirname(__file__), "README.md"), "r", encoding="u
 setup(
     name="Augmented LM Chatbots",
     version="0.0.1",
-    packages=find_packages(include=["chatbots"]),
-    requires=requirements,
+    packages=find_packages(include=["chatbots", "chatbots.*"]),
+    install_requires=requirements,
     author="Alexander Pozharskii",
     author_email="gaussmake@gmail.com",
     url="https://github.com/alex4321/gpt3-retrieving-bot",
