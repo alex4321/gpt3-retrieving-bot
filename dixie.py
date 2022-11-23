@@ -1,12 +1,13 @@
-from session import RobotConfig, RobotSession
-from lm_utils import PromptFiller, LanguageModelGPT3
-from search import SearchDuckDuckGo, SearchRanker, SearchRankerItem, SearchLocalDatabaseTextual, SearchLocalDatabaseSemantic, NNConfig, SearchCache
-import openai
 import os
 import shutil
 import tempfile
-from botloggers import LoggerChannelFile, LMLogger, SearchLogger, CompletionReactionLogger
-from completion_reactions import AnswerCompletionReaction, DiceCompletionReaction, SearchCompletionReaction, ActionCompletionReaction
+import openai
+from chatbots import RobotConfig, RobotSession, \
+    PromptFiller, LanguageModelGPT3, \
+    SearchDuckDuckGo, SearchRanker, SearchRankerItem, SearchLocalDatabaseTextual, \
+    SearchLocalDatabaseSemantic, NNConfig, SearchCache, \
+    LoggerChannelFile, LMLogger, SearchLogger, CompletionReactionLogger, \
+    AnswerCompletionReaction, DiceCompletionReaction, SearchCompletionReaction, ActionCompletionReaction
 
 
 if __name__ == "__main__":
@@ -85,6 +86,7 @@ if __name__ == "__main__":
             logger,
             SearchRanker(
                 "cross-encoder/nli-deberta-v3-base",
+                2,
                 NNConfig("cuda:0", 8),
                 search_systems,
                 2
