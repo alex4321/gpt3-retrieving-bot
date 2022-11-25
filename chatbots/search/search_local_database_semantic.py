@@ -38,12 +38,36 @@ class SearchLocalDatabaseSemantic(SearchInterface):
         super().__init__()
         self.embedder_params = embedder_params
         self.model = get_sentence_transformer(model, device=self.embedder_params.device)
+        self.encoder_dim = self.model.encode([""]).shape[-1]
         self.directory = directory
         self.top_n = top_n
         if knn_params is None:
             knn_params = {}
         self.knn_params = dict(__DEFAULT_KNN_PARAMS__, **knn_params)
         self.paragraphs, self.knn = self._scan(self.directory, False, self.top_n, self.knn_params)
+
+    def _embeddings_to_string(self, embeddings: np.ndarray) -> str:
+        embeddings_bytes = embeddings.astype(np.float32).tobytes()
+        embeddings_bytes_ascii = []
+        top_bit = b"\x80"[0]
+        top_bit_others = b"\x7f"[0]
+        for embeddings_byte in embeddings_bytes:
+            embeddings_byte_part1 = (embeddings_byte & top_bit) >> 7
+            embeddings_byte_part2 = embeddings_byte & top_bit_others
+            embeddings_bytes_ascii.append(embeddings_byte_part1)
+            embeddings_bytes_ascii.append(embeddings_byte_part2)
+        return bytes(embeddings_bytes_ascii).decode("ascii")
+
+    def _embeddings_from_string(self, embeddings_data: str) -> np.ndarray:
+        embeddings_bytes = embeddings_data.encode("ascii")
+        embeddings_bytes_parsed_values = []
+        for i in range(len(embeddings_bytes) // 2):
+            embeddings_byte_part1 = embeddings_bytes[i * 2]
+            embeddings_byte_part2 = embeddings_bytes[i * 2 + 1]
+            embeddings_byte = (embeddings_byte_part1 << 7) | embeddings_byte_part2
+            embeddings_bytes_parsed_values.append(embeddings_byte)
+        embeddings_bytes_parsed = bytes(embeddings_bytes_parsed_values)
+        return np.frombuffer(bytes(embeddings_bytes_parsed), dtype=np.float32).reshape([-1, self.encoder_dim])
 
     def _scan(self, directory: str, rebuild_knn: bool, top_n: int, knn_params: dict) \
         -> Tuple[List[Paragraph], Union[KNeighborsClassifier, None]]:
@@ -61,7 +85,7 @@ class SearchLocalDatabaseSemantic(SearchInterface):
                     paragraphs.append(Paragraph(
                         document_name=document_name_original,
                         text=paragraph["text"],
-                        sentence_embeddings=np.array(paragraph["sentence_embeddings"]),
+                        sentence_embeddings=self._embeddings_from_string(paragraph["sentence_embeddings"]),
                     ))
         knn_fname = os.path.join(directory, "knn.pkl")
         if (not os.path.exists(knn_fname)) or rebuild_knn:
@@ -118,10 +142,10 @@ class SearchLocalDatabaseSemantic(SearchInterface):
         new_paragraphs = [item for item in new_paragraphs if item != ""]
         for new_paragraph in new_paragraphs:
             sentences = nltk.sent_tokenize(new_paragraph)
-            embeddings = self._encode(sentences).tolist()
+            embeddings = self._encode(sentences)
             document_data["paragraphs"].append({
                 "text": new_paragraph,
-                "sentence_embeddings": embeddings,
+                "sentence_embeddings": self._embeddings_to_string(embeddings),
             })
 
         with open(document_fname, "w", encoding="utf-8") as target:
