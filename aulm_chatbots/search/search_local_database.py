@@ -54,7 +54,7 @@ class SearchLocalDatabase(SearchInterface):
         else:
             new_embeddings = document_embeddings
         if self._texts is not None:
-            new_texts = np.vstack([self._texts, documents])
+            new_texts = np.array(list(self._texts) + documents)
         else:
             new_texts = documents
         knn = KNeighborsClassifier(n_neighbors=min([self.top_n, len(new_embeddings)]))
