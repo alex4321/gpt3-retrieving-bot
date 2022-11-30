@@ -1,9 +1,6 @@
-openai
 pytest
 requests
 bs4
-nltk
-fuzzysearch
 scikit-learn
 transformers
 sentence-transformers
