@@ -49,11 +49,11 @@ class SearchLocalDatabase(SearchInterface):
     def add_documents(self, documents: List[str]) -> None:
         documents = [document.strip() for document in documents]
         document_embeddings = self.model.encode(documents, batch_size=self.encoder_batch_size)
-        if self._embeddings:
+        if self._embeddings is not None:
             new_embeddings = np.vstack([self._embeddings, document_embeddings])
         else:
             new_embeddings = document_embeddings
-        if self._texts:
+        if self._texts is not None:
             new_texts = np.vstack([self._texts, documents])
         else:
             new_texts = documents
