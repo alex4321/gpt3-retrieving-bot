@@ -57,7 +57,7 @@ class SearchLocalDatabase(SearchInterface):
             new_texts = np.vstack([self._texts, documents])
         else:
             new_texts = documents
-        knn = KNeighborsClassifier(n_neighbors=self.top_n)
+        knn = KNeighborsClassifier(n_neighbors=min([self.top_n, len(new_embeddings)]))
         knn.fit(new_embeddings, np.arange(len(new_embeddings)))
         self._save_pickle(os.path.join(self.data_directory, _KNN_FNAME), knn)
         self._save_pickle(os.path.join(self.data_directory, _EMBEDDINGS_FNAME), new_embeddings)
