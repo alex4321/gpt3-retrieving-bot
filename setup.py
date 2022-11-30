@@ -9,13 +9,13 @@ with open(os.path.join(os.path.dirname(__file__), "README.md"), "r", encoding="u
 setup(
     name="auglm-chatbots",
     version="0.0.4",
-    packages=find_packages(include=["chatbots", "chatbots.*"]),
+    packages=find_packages(include=["aulm_chatbots", "aulm_chatbots.*"]),
     install_requires=requirements,
     author="Alexander Pozharskii",
     author_email="gaussmake@gmail.com",
     url="https://github.com/alex4321/gpt3-retrieving-bot",
     data_files=[
-        ('', ['README.md', 'requirements.txt', 'aulm_chatbots/prompt.txt'])
+        ('', ['README.md', 'requirements.txt', 'aulm_chatbots/prompt.txt']),
     ],
     include_package_data=True,
     long_description=readme_text,
