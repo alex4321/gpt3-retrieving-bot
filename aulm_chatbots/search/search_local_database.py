@@ -49,16 +49,16 @@ class SearchLocalDatabase(SearchInterface):
     def add_documents(self, documents: List[str]) -> None:
         documents = [document.strip() for document in documents]
         document_embeddings = self.model.encode(documents, batch_size=self.encoder_batch_size)
-        if self._embeddings:
+        if self._embeddings is not None:
             new_embeddings = np.vstack([self._embeddings, document_embeddings])
         else:
             new_embeddings = document_embeddings
-        if self._texts:
-            new_texts = np.vstack([self._texts, documents])
+        if self._texts is not None:
+            new_texts = np.array(list(self._texts) + documents)
         else:
             new_texts = documents
-        knn = KNeighborsClassifier(n_neighbors=self.top_n)
-        knn.fit(new_embeddings, new_texts)
+        knn = KNeighborsClassifier(n_neighbors=min([self.top_n, len(new_embeddings)]))
+        knn.fit(new_embeddings, np.arange(len(new_embeddings)))
         self._save_pickle(os.path.join(self.data_directory, _KNN_FNAME), knn)
         self._save_pickle(os.path.join(self.data_directory, _EMBEDDINGS_FNAME), new_embeddings)
         self._save_pickle(os.path.join(self.data_directory, _TEXTS_FNAME), new_texts)
@@ -71,6 +71,6 @@ class SearchLocalDatabase(SearchInterface):
         scores = self._knn.predict_proba(embeddings)[0]
         top_indices = (-scores).argsort()[:self.top_n]
         return [
-            self._knn.classes_[index]
+            self._texts[index]
             for index in top_indices
         ]

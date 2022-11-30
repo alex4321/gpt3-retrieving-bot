@@ -28,7 +28,7 @@ class HintsDict(OrderedDict):
         result = ""
         for query, items in self.items():
             for response in items:
-                result += "\n- " + self.postprocess(f"{query} : {response}")
+                result += "\n- " + f"{query} : self.postprocess({response})"
         result = result.strip()
         return result
 
