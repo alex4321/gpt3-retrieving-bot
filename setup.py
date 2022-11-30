@@ -8,7 +8,7 @@ with open(os.path.join(os.path.dirname(__file__), "README.md"), "r", encoding="u
     readme_text = readme.read()
 setup(
     name="auglm-chatbots",
-    version="0.0.9",
+    version="0.0.10",
     packages=find_packages(include=["aulm_chatbots", "aulm_chatbots.*"]),
     install_requires=requirements,
     author="Alexander Pozharskii",
